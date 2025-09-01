@@ -196,7 +196,7 @@ class FallTemplateBot2025(ForecastBot):
             Before answering, write:
             (a) BASE RATE: How often do similar events typically happen? What's the historical frequency?
             (b) The time left until the outcome is known
-            (c) What specific evidence moves you away from the base rate?
+            (c) How much should current evidence and trends adjust your view from the base rate?            
             (d) A brief scenario for No outcome
             (e) A brief scenario for Yes outcome
         
@@ -204,8 +204,10 @@ class FallTemplateBot2025(ForecastBot):
 
             FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
 
-            You write your rationale remembering that good forecasters put extra weight on the status quo outcome since the world changes slowly most of the time.
+            You write your rationale, carefully weighing historical patterns against current evidence.
 
+            Consider the specific domain: mature fields may change slowly, while emerging technologies and social phenomena may change rapidly.
+            
             The last thing you write is your final answer as: "Probability: ZZ%", 0-100
             """
         )
@@ -215,9 +217,8 @@ class FallTemplateBot2025(ForecastBot):
             reasoning, BinaryPrediction, model=self.get_llm("parser", "llm")
         )
 
-        # Avoid extreme predictions
         decimal_pred = max(0.01, min(0.99, binary_prediction.prediction_in_decimal))
-
+        
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {decimal_pred}"
         )
@@ -257,6 +258,8 @@ class FallTemplateBot2025(ForecastBot):
             FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
 
             You write your rationale remembering that (1) good forecasters put extra weight on the status quo outcome since the world changes slowly most of the time, and (2) good forecasters leave some moderate probability on most options to account for unexpected outcomes.
+
+            Consider the specific domain: mature fields may change slowly, while emerging technologies and social phenomena may change rapidly.
 
             The last thing you write is your final probabilities for the N options in this order {question.options} as:
             Option_A: Probability_A
@@ -329,6 +332,8 @@ class FallTemplateBot2025(ForecastBot):
             (d) The expectations of experts and markets.
             (e) A brief description of an unexpected scenario that results in a low outcome.
             (f) A brief description of an unexpected scenario that results in a high outcome.
+
+            Consider the specific domain: mature fields may change slowly, while emerging technologies and social phenomena may change rapidly.
 
             You remind yourself that good forecasters are humble and set wide 90/10 confidence intervals to account for unknown unknowns.
 
