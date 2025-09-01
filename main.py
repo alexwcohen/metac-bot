@@ -28,6 +28,9 @@ logger = logging.getLogger(__name__)
 
 class FallTemplateBot2025(ForecastBot):
     """
+    This is a copy of the template bot for Fall 2025 Metaculus AI Tournament with small tweaks, based on asking Claude to best practices on forecasting
+
+    [Original text below]
     This is a copy of the template bot for Fall 2025 Metaculus AI Tournament.
     This bot is what is used by Metaculus in our benchmark, but is also provided as a template for new bot makers.
     This template is given as-is, and though we have covered most test cases
@@ -53,7 +56,7 @@ class FallTemplateBot2025(ForecastBot):
     Only the research and forecast functions need to be implemented in ForecastBot subclasses,
     though you may want to override other ones.
     In this example, you can change the prompts to be whatever you want since,
-    structure_output uses an LLMto intelligently reformat the output into the needed structure.
+    structure_output uses an LLM to intelligently reformat the output into the needed structure.
 
     By default (i.e. 'tournament' mode), when you run this script, it will forecast on any open questions for the
     MiniBench and Seasonal AIB tournaments. If you want to forecast on only one or the other, you can remove one
@@ -153,8 +156,8 @@ class FallTemplateBot2025(ForecastBot):
                 searcher = SmartSearcher(
                     model=model_name,
                     temperature=0,
-                    num_searches_to_run=2,
-                    num_sites_per_search=10,
+                    num_searches_to_run=3,  # Changed from 2 to 3
+                    num_sites_per_search=10, 
                     use_advanced_filters=False,
                 )
                 research = await searcher.invoke(prompt)
@@ -190,11 +193,16 @@ class FallTemplateBot2025(ForecastBot):
 
             Today is {datetime.now().strftime("%Y-%m-%d")}.
 
-            Before answering you write:
-            (a) The time left until the outcome to the question is known.
-            (b) The status quo outcome if nothing changed.
-            (c) A brief description of a scenario that results in a No outcome.
-            (d) A brief description of a scenario that results in a Yes outcome.
+            Before answering, write:
+            (a) BASE RATE: How often do similar events typically happen? What's the historical frequency?
+            (b) The time left until the outcome is known
+            (c) What specific evidence moves you away from the base rate?
+            (d) A brief scenario for No outcome
+            (e) A brief scenario for Yes outcome
+        
+            Remember that extreme predictions (below 10% or above 90%) are usually overconfident.
+
+            FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
 
             You write your rationale remembering that good forecasters put extra weight on the status quo outcome since the world changes slowly most of the time.
 
@@ -206,7 +214,9 @@ class FallTemplateBot2025(ForecastBot):
         binary_prediction: BinaryPrediction = await structure_output(
             reasoning, BinaryPrediction, model=self.get_llm("parser", "llm")
         )
-        decimal_pred = max(0.01, min(0.99, binary_prediction.prediction_in_decimal))
+
+        # Avoid extreme predictions
+        decimal_pred = max(0.05, min(0.95, binary_prediction.prediction_in_decimal))
 
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {decimal_pred}"
@@ -243,6 +253,8 @@ class FallTemplateBot2025(ForecastBot):
             (a) The time left until the outcome to the question is known.
             (b) The status quo outcome if nothing changed.
             (c) A description of an scenario that results in an unexpected outcome.
+
+            FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
 
             You write your rationale remembering that (1) good forecasters put extra weight on the status quo outcome since the world changes slowly most of the time, and (2) good forecasters leave some moderate probability on most options to account for unexpected outcomes.
 
@@ -319,6 +331,13 @@ class FallTemplateBot2025(ForecastBot):
             (f) A brief description of an unexpected scenario that results in a high outcome.
 
             You remind yourself that good forecasters are humble and set wide 90/10 confidence intervals to account for unknown unknowns.
+
+            IMPORTANT: Your 10th-90th percentile range should be WIDE enough that you'd only be surprised 
+            20% of the time if the outcome falls outside it. Most people are overconfident - err on the 
+            side of wider intervals. Ask yourself: "Would I bet money that the outcome will be between 
+            my 10th and 90th percentiles?"
+
+            FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
 
             The last thing you write is your final answer as:
             "
@@ -403,7 +422,7 @@ if __name__ == "__main__":
         research_reports_per_question=1,
         predictions_per_research_report=5,
         use_research_summary_to_forecast=False,
-        publish_reports_to_metaculus=True,
+        publish_reports_to_metaculus=False, ## TOGGLE
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
         # llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
