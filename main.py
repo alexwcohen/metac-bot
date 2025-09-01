@@ -216,7 +216,7 @@ class FallTemplateBot2025(ForecastBot):
         )
 
         # Avoid extreme predictions
-        decimal_pred = max(0.05, min(0.95, binary_prediction.prediction_in_decimal))
+        decimal_pred = max(0.01, min(0.99, binary_prediction.prediction_in_decimal))
 
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {decimal_pred}"
@@ -422,7 +422,7 @@ if __name__ == "__main__":
         research_reports_per_question=1,
         predictions_per_research_report=5,
         use_research_summary_to_forecast=False,
-        publish_reports_to_metaculus=False, ## TOGGLE
+        publish_reports_to_metaculus=True, ## TOGGLE
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
         # llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
