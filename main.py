@@ -242,14 +242,14 @@ class FallTemplateBot2025(ForecastBot):
             </thinking_process>
 
             <finalization_format> Provide:
-            A) **Rationale (concise, decision-useful; no long chain-of-thought math)**
+            A) Rationale (concise, decision-useful; no long chain-of-thought math)**
             - Outside view (reference classes & base rates)
             - Inside view (current evidence)
             - External forecasts (with quality notes)
             - Cruxes & leading indicators
             - Key uncertainties
 
-            B) **Forecast Outputs (strict order & formats)**
+            B) Forecast Outputs (strict order & formats)**
             The last thing you write is your final answer as: "Probability: ZZ%", 0-100
 
             </finalization_format>
@@ -331,14 +331,14 @@ class FallTemplateBot2025(ForecastBot):
             </thinking_process>
 
             <finalization_format> Provide:
-            A) **Rationale (concise, decision-useful; no long chain-of-thought math)**
+            A) Rationale (concise, decision-useful; no long chain-of-thought math)**
             - Outside view (reference classes & base rates)
             - Inside view (current evidence)
             - External forecasts (with quality notes)
             - Cruxes & leading indicators
             - Key uncertainties
 
-            B) **Forecast Outputs (strict order & formats)**
+            B) Forecast Outputs (strict order & formats)
             The last thing you write is your final probabilities for the N options in this order {question.options} as:
             Option_A: Probability_A
             Option_B: Probability_B
@@ -446,14 +446,14 @@ class FallTemplateBot2025(ForecastBot):
 
             </thinking_process>
             <finalization_format> Provide:
-            A) **Rationale (concise, decision-useful; no long chain-of-thought math)**
+            A) Rationale (concise, decision-useful; no long chain-of-thought math)**
             - Outside view (reference classes & base rates)
             - Inside view (current evidence)
             - External forecasts (with quality notes)
             - Cruxes & leading indicators
             - Key uncertainties
 
-            B) **Forecast Outputs (strict order & formats)**
+            B) Forecast Outputs (strict order & formats)
             Formatting Instructions:
                     - Please notice the units requested (e.g. whether you represent a number as 1,000,000 or 1 million).
                     - Never use scientific notation.
@@ -461,7 +461,7 @@ class FallTemplateBot2025(ForecastBot):
             IMPORTANT: Your 10th-90th percentile range should be WIDE enough that you'd only be surprised
                     20% of the time if the outcome falls outside it. Most people are overconfident - err on the
                     side of wider intervals. Ask yourself: "Would I bet money that the outcome will be between
-                    my 10th and 90th percentiles?"
+                    my 10th and 90th percentiles?" Then extend your 10th-90th to be even wider.
             The last thing you write is your final answer as:
                     "
                     Percentile 10: XX
