@@ -207,51 +207,37 @@ class FallTemplateBot2025(ForecastBot):
 
             </context>
 
-            <thinking_process> Before providing your forecasts, take the following steps:
+            <thinking_process> Before providing your forecasts:
 
-            1. **Initial Assessment**
-            - Restate the event in your own words, aligned with the resolution criteria
-
-            2. **Base Rates**
-            - Identify at least 1-2 relevant reference classes and their base rates
-            - How often do similar events typically happen? What's the historical frequency?
-
-            3. **External Forecast Research**
-            - Check Metaculus, Good Judgment Open, Manifold, Polymarket, PredictIt, or other reputable platforms
-            - Record consensus forecasts if available; note calibration/quality of each source
-            - If unavailable, acknowledge and proceed without them
-
-            4. **Systematic Analysis**
-            - List **factors increasing values for answer**. How could it be higher?
-            - List **factors decreasing values for answer**. How could it be lower?
-            - Break into sub-problems and identify causal forces
-            - Weigh evidence quality: prioritize hard data over speculation
-
-            5. **Aggregation & Pressure-Testing**
-            - Start with base rate
-            - Adjust with evidence and external forecasts (Bayesian-style updating)
-            - Apply “consider the opposite” to stress test your forecast
-            - Perform sensitivity check: what info would swing your estimate by ≥20 percentage points?
-
-            6. **Bias Mitigation Checklist** 
-            - Gullibility: Have I verified key claims from multiple sources? 
-            - Availability: Am I overweighting recent/memorable events?
-            - Anchoring: Did I consider the full 0-100% range before settling?
-            - Acquiescence: Am I defaulting to "yes" or high probabilities?
-            - Confirmation: Did I genuinely seek disconfirming evidence?
-            - Overconfidence: Are my confidence intervals too narrow? 
-
-            For each bias detected, explicitly state your correction.
-
-            7. **Calibration**
-            - Avoid extreme values unless supported by extraordinary evidence (Cromwell’s Rule)
-            - Document uncertainty range
-
-            8. **Forecast Quality Check**
-            - Info quality: [Low/Medium/High] - Do I have enough relevant information? 
-            - Predictability: [Low/Medium/High] - Is this event inherently forecastable? 
-            - Confidence: [Low/Medium/High] - How confident am I in this specific forecast? 
-            - Key uncertainties: [List 1-2 factors that could swing the forecast most]
+            1. Restate the Question
+            - Briefly rephrase the event in your own words, aligned with the resolution criteria.
+            
+            2. Base Rates (Outside View)
+            - Identify at least one relevant reference class and its historical frequency.
+            - Start here before adding case-specific detail.
+            
+            3. External Benchmarks
+            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) if available.
+            - Note the reliability/calibration of each source.
+            
+            4. Case-Specific Analysis (Inside View)
+            - List factors pushing probabilities up vs. down.
+            - Break into sub-problems if useful.
+            - Weigh evidence quality (data > speculation).
+            
+            5. Pressure-Testing
+            - Begin with base rate, then update with inside view and external forecasts.
+            - Apply “consider the opposite.”
+            - Sensitivity check: what info would shift your forecast by ≥20 points?
+            
+            6. Bias & Overconfidence Check
+            - Are you overfitting to recent/striking events?
+            - Did you seek disconfirming evidence?
+            - Are your confidence intervals wide enough? (Err toward broader CIs unless evidence is strong.)
+            
+            7. Calibration
+            - Avoid extreme probabilities without extraordinary evidence (Cromwell’s Rule).
+            - State your uncertainty range explicitly.
 
             </thinking_process>
 
@@ -310,51 +296,37 @@ class FallTemplateBot2025(ForecastBot):
 
             </context>
 
-            <thinking_process> Before providing your forecasts, take the following steps:
+            <thinking_process> Before providing your forecasts:
 
-            1. **Initial Assessment**
-            - Restate the event in your own words, aligned with the resolution criteria
-
-            2. **Base Rates**
-            - Identify at least 1-2 relevant reference classes and their base rates
-            - How often do similar events typically happen? What's the historical frequency?
-
-            3. **External Forecast Research**
-            - Check Metaculus, Good Judgment Open, Manifold, Polymarket, PredictIt, or other reputable platforms
-            - Record consensus forecasts if available; note calibration/quality of each source
-            - If unavailable, acknowledge and proceed without them
-
-            4. **Systematic Analysis**
-            - List **factors increasing values for answer**. How could it be higher?
-            - List **factors decreasing values for answer**. How could it be lower?
-            - Break into sub-problems and identify causal forces
-            - Weigh evidence quality: prioritize hard data over speculation
-
-            5. **Aggregation & Pressure-Testing**
-            - Start with base rate
-            - Adjust with evidence and external forecasts (Bayesian-style updating)
-            - Apply “consider the opposite” to stress test your forecast
-            - Perform sensitivity check: what info would swing your estimate by ≥20 percentage points?
-
-            6. **Bias Mitigation Checklist** 
-            - Gullibility: Have I verified key claims from multiple sources? 
-            - Availability: Am I overweighting recent/memorable events?
-            - Anchoring: Did I consider the full 0-100% range before settling?
-            - Acquiescence: Am I defaulting to "yes" or high probabilities?
-            - Confirmation: Did I genuinely seek disconfirming evidence?
-            - Overconfidence: Are my confidence intervals too narrow? 
-
-            For each bias detected, explicitly state your correction.
-
-            7. **Calibration**
-            - Avoid extreme values unless supported by extraordinary evidence (Cromwell’s Rule)
-            - Document uncertainty range
-
-            8. **Forecast Quality Check**
-            - Info quality: [Low/Medium/High] - Do I have enough relevant information? 
-            - Predictability: [Low/Medium/High] - Is this event inherently forecastable? 
-            - Confidence: [Low/Medium/High] - How confident am I in this specific forecast? 
-            - Key uncertainties: [List 1-2 factors that could swing the forecast most]
+            1. Restate the Question
+            - Briefly rephrase the event in your own words, aligned with the resolution criteria.
+            
+            2. Base Rates (Outside View)
+            - Identify at least one relevant reference class and its historical frequency.
+            - Start here before adding case-specific detail.
+            
+            3. External Benchmarks
+            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) if available.
+            - Note the reliability/calibration of each source.
+            
+            4. Case-Specific Analysis (Inside View)
+            - List factors pushing probabilities up vs. down.
+            - Break into sub-problems if useful.
+            - Weigh evidence quality (data > speculation).
+            
+            5. Pressure-Testing
+            - Begin with base rate, then update with inside view and external forecasts.
+            - Apply “consider the opposite.”
+            - Sensitivity check: what info would shift your forecast by ≥20 points?
+            
+            6. Bias & Overconfidence Check
+            - Are you overfitting to recent/striking events?
+            - Did you seek disconfirming evidence?
+            - Are your confidence intervals wide enough? (Err toward broader CIs unless evidence is strong.)
+            
+            7. Calibration
+            - Avoid extreme values without extraordinary evidence (Cromwell’s Rule).
+            - State your uncertainty range explicitly.
 
             </thinking_process>
 
@@ -440,54 +412,39 @@ class FallTemplateBot2025(ForecastBot):
 
             </context>
 
-            <thinking_process> Before providing your forecasts, take the following steps:
+            <thinking_process> Before providing your forecasts:
 
-            1. **Initial Assessment**
-            - Restate the event in your own words, aligned with the resolution criteria
-
-            2. **Base Rates**
-            - Identify at least 1-2 relevant reference classes and their base rates
-            - How often do similar events typically happen? What's the historical frequency?
-
-            3. **External Forecast Research**
-            - Check Metaculus, Good Judgment Open, Manifold, Polymarket, PredictIt, or other reputable platforms
-            - Record consensus forecasts if available; note calibration/quality of each source
-            - If unavailable, acknowledge and proceed without them
-
-            4. **Systematic Analysis**
-            - List **factors increasing values for answer**. How could it be higher?
-            - List **factors decreasing values for answer**. How could it be lower?
-            - Break into sub-problems and identify causal forces
-            - Weigh evidence quality: prioritize hard data over speculation
-
-            5. **Aggregation & Pressure-Testing**
-            - Start with base rate
-            - Adjust with evidence and external forecasts (Bayesian-style updating)
-            - Apply “consider the opposite” to stress test your forecast
-            - Perform sensitivity check: what info would swing your estimate by ≥20 percentage points?
-
-            6. **Bias Mitigation Checklist** 
-            - Gullibility: Have I verified key claims from multiple sources? 
-            - Availability: Am I overweighting recent/memorable events?
-            - Anchoring: Did I consider the full 0-100% range before settling?
-            - Acquiescence: Am I defaulting to "yes" or high probabilities?
-            - Confirmation: Did I genuinely seek disconfirming evidence?
-            - Overconfidence: Are my confidence intervals too narrow? 
-
-            For each bias detected, explicitly state your correction.
-
-            7. **Calibration**
-            - Avoid extreme values unless supported by extraordinary evidence (Cromwell’s Rule)
-            - Document uncertainty range
-
-            8. **Forecast Quality Check**
-            - Info quality: [Low/Medium/High] - Do I have enough relevant information? 
-            - Predictability: [Low/Medium/High] - Is this event inherently forecastable? 
-            - Confidence: [Low/Medium/High] - How confident am I in this specific forecast? 
-            - Key uncertainties: [List 1-2 factors that could swing the forecast most]
+            1. Restate the Question
+            - Briefly rephrase the event in your own words, aligned with the resolution criteria.
+            
+            2. Base Rates (Outside View)
+            - Identify at least one relevant reference class and its historical frequency.
+            - Start here before adding case-specific detail.
+            
+            3. External Benchmarks
+            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) if available.
+            - Note the reliability/calibration of each source.
+            
+            4. Case-Specific Analysis (Inside View)
+            - List factors pushing probabilities up vs. down.
+            - Break into sub-problems if useful.
+            - Weigh evidence quality (data > speculation).
+            
+            5. Pressure-Testing
+            - Begin with base rate, then update with inside view and external forecasts.
+            - Apply “consider the opposite.”
+            - Sensitivity check: what info would shift your forecast by ≥20 points?
+            
+            6. Bias & Overconfidence Check
+            - Are you overfitting to recent/striking events?
+            - Did you seek disconfirming evidence?
+            - Are your confidence intervals wide enough? (Err toward broader CIs unless evidence is strong.)
+            
+            7. Calibration
+            - Avoid extreme values without extraordinary evidence (Cromwell’s Rule).
+            - State your uncertainty range explicitly.
 
             </thinking_process>
-
             <finalization_format> Provide:
             A) **Rationale (concise, decision-useful; no long chain-of-thought math)**
             - Outside view (reference classes & base rates)
@@ -592,17 +549,17 @@ if __name__ == "__main__":
         publish_reports_to_metaculus=True, ## TOGGLE
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
-        llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
-             "default": GeneralLlm(
-                 model="openrouter/openai/gpt-5", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
-                 temperature=0.3,
-                 timeout=40,
-                 allowed_tries=2,
-             ),
+        #llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
+        #     "default": GeneralLlm(
+        #         model="openrouter/openai/gpt-5", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
+        #         temperature=0.3,
+        #         timeout=40,
+        #         allowed_tries=2,
+        #     ),
         #     "summarizer": "openai/gpt-4o-mini",
         #     "researcher": "asknews/deep-research/low",
         #     "parser": "openai/gpt-4o-mini",
-        },
+        #},
     )
 
     if run_mode == "tournament":
