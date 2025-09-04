@@ -595,9 +595,9 @@ if __name__ == "__main__":
                  timeout=40,
                  allowed_tries=2,
              ),
-             "summarizer": "openai/gpt-4o-mini",
-             "researcher": "asknews/deep-research/low",
-             "parser": "openai/gpt-4o-mini",
+        #     "summarizer": "openai/gpt-4o-mini",
+        #     "researcher": "asknews/deep-research/low",
+        #     "parser": "openai/gpt-4o-mini",
         },
     )
 
