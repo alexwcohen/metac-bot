@@ -120,7 +120,7 @@ class FallTemplateBot2025(ForecastBot):
                 This question's outcome will be determined by the specific criteria below:
                 {question.resolution_criteria}
 
-                {question.fine_print}
+                Additional clarifications: {question.fine_print}
                 </context>
 
                 <approach> You should learn:
@@ -198,7 +198,7 @@ class FallTemplateBot2025(ForecastBot):
             This question's outcome will be determined by the specific criteria below. These criteria have not yet been satisfied:
             {question.resolution_criteria}
 
-            {question.fine_print}
+            Additional clarifications: {question.fine_print}
 
             You have been provided with context from a research assistant. Their research says: 
             {research} 
@@ -207,17 +207,30 @@ class FallTemplateBot2025(ForecastBot):
 
             </context>
 
+            <superforecasting_principles> Apply these core Tetlock principles throughout your analysis:
+            - Break seemingly intractable problems into tractable sub-problems (Fermi-ization)
+            - Strike the right balance between inside and outside views
+            - Strike the right balance between under- and overreacting to evidence
+            - Look for the clashing causal forces at work in each problem
+            - Strive to distinguish as many degrees of doubt as the problem permits
+            - Balance under- and overconfidence, erring on the side of underconfidence
+            - Look for the errors behind your mistakes but beware of rearview-mirror hindsight bias
+            
+            </superforecasting_principles>
+
             <thinking_process> Before providing your forecasts:
 
             1. Restate the Question
-            - Briefly rephrase the event in your own words, aligned with the resolution criteria.
+            - Briefly rephrase the question and resolution criteria in precise, measurable terms.
             
             2. Base Rates (Outside View)
-            - Identify at least one relevant reference class and its historical frequency.
-            - Start here before adding case-specific detail.
+            - Identify 2-3 relevant reference classes (broader to narrower)
+            - Calculate historical base rates for each class
+            - Weight the reference classes by relevance and data quality            
+            - Start here before adding case-specific detail. 
             
             3. External Benchmarks
-            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) if available.
+            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
             - Note the reliability/calibration of each source.
             
             4. Case-Specific Analysis (Inside View)
@@ -287,7 +300,7 @@ class FallTemplateBot2025(ForecastBot):
             This question's outcome will be determined by the specific criteria below. These criteria have not yet been satisfied:
             {question.resolution_criteria}
 
-            {question.fine_print}
+            Additional clarifications: {question.fine_print}
 
             You have been provided with context from a research assistant. Their research says: 
             {research} 
@@ -296,17 +309,30 @@ class FallTemplateBot2025(ForecastBot):
 
             </context>
 
+            <superforecasting_principles> Apply these core Tetlock principles throughout your analysis:
+            - Break seemingly intractable problems into tractable sub-problems (Fermi-ization)
+            - Strike the right balance between inside and outside views
+            - Strike the right balance between under- and overreacting to evidence
+            - Look for the clashing causal forces at work in each problem
+            - Strive to distinguish as many degrees of doubt as the problem permits
+            - Balance under- and overconfidence, erring on the side of underconfidence
+            - Look for the errors behind your mistakes but beware of rearview-mirror hindsight bias
+            
+            </superforecasting_principles>
+
             <thinking_process> Before providing your forecasts:
 
             1. Restate the Question
-            - Briefly rephrase the event in your own words, aligned with the resolution criteria.
+            - Briefly rephrase the question and resolution criteria in precise, measurable terms.
             
             2. Base Rates (Outside View)
-            - Identify at least one relevant reference class and its historical frequency.
-            - Start here before adding case-specific detail.
+            - Identify 2-3 relevant reference classes (broader to narrower)
+            - Calculate historical base rates for each class
+            - Weight the reference classes by relevance and data quality            
+            - Start here before adding case-specific detail. 
             
             3. External Benchmarks
-            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) if available.
+            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
             - Note the reliability/calibration of each source.
             
             4. Case-Specific Analysis (Inside View)
@@ -412,17 +438,30 @@ class FallTemplateBot2025(ForecastBot):
 
             </context>
 
+            <superforecasting_principles> Apply these core Tetlock principles throughout your analysis:
+            - Break seemingly intractable problems into tractable sub-problems (Fermi-ization)
+            - Strike the right balance between inside and outside views
+            - Strike the right balance between under- and overreacting to evidence
+            - Look for the clashing causal forces at work in each problem
+            - Strive to distinguish as many degrees of doubt as the problem permits
+            - Balance under- and overconfidence, erring on the side of underconfidence
+            - Look for the errors behind your mistakes but beware of rearview-mirror hindsight bias
+            
+            </superforecasting_principles>
+
             <thinking_process> Before providing your forecasts:
 
             1. Restate the Question
-            - Briefly rephrase the event in your own words, aligned with the resolution criteria.
+            - Briefly rephrase the question and resolution criteria in precise, measurable terms.
             
             2. Base Rates (Outside View)
-            - Identify at least one relevant reference class and its historical frequency.
-            - Start here before adding case-specific detail.
+            - Identify 2-3 relevant reference classes (broader to narrower)
+            - Calculate historical base rates for each class
+            - Weight the reference classes by relevance and data quality            
+            - Start here before adding case-specific detail. 
             
             3. External Benchmarks
-            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) if available.
+            - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
             - Note the reliability/calibration of each source.
             
             4. Case-Specific Analysis (Inside View)
