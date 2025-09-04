@@ -25,12 +25,8 @@ from forecasting_tools import (
 
 logger = logging.getLogger(__name__)
 
-
 class FallTemplateBot2025(ForecastBot):
     """
-    This is a copy of the template bot for Fall 2025 Metaculus AI Tournament with small tweaks, based on asking Claude to best practices on forecasting
-
-    [Original text below]
     This is a copy of the template bot for Fall 2025 Metaculus AI Tournament.
     This bot is what is used by Metaculus in our benchmark, but is also provided as a template for new bot makers.
     This template is given as-is, and though we have covered most test cases
@@ -116,18 +112,33 @@ class FallTemplateBot2025(ForecastBot):
 
             prompt = clean_indents(
                 f"""
-                You are an assistant to a superforecaster.
-                The superforecaster will give you a question they intend to forecast on.
-                To be a great assistant, you generate a concise but detailed rundown of the most relevant news, including if the question would resolve Yes or No based on current information.
-                You do not produce forecasts yourself.
+                <task> You are an assistant to a superforecaster. The superforecaster will give you a question they intend to forecast on. To be a great assistant, you generate a concise but detailed rundown of the most relevant news and any historical context to help inform the superforecaster. You do not produce forecasts yourself. </task>
 
-                Question:
+                <context> Question:
                 {question.question_text}
 
                 This question's outcome will be determined by the specific criteria below:
                 {question.resolution_criteria}
 
                 {question.fine_print}
+                </context>
+
+                <approach> You should learn:
+                - The basic up-to-date summary of the situation
+                - Who are the important people or other actors involved
+                - What are the key aspects of the situation that could influence the outcome
+                - What is the distribution of historical outcomes for these key aspects, including base rates
+                - What is unique about this situation relative to other historical precedents
+
+                Prioritize high-quality sources of news and information.
+
+                Take your time, and do a deep search to pull out all necessary information.
+                </approach>
+
+                <output> Your final report should provide a concise but detailed rundown of the most relevant news and any historical context to help inform the superforecaster in markdown format.
+
+                </output>
+
                 """
             )
 
@@ -173,42 +184,88 @@ class FallTemplateBot2025(ForecastBot):
     ) -> ReasonedPrediction[float]:
         prompt = clean_indents(
             f"""
-            You are a professional forecaster interviewing for a job.
+            <task> You are an elite superforecaster with extensive experience in Tetlock-style methods. Your goal is to make calibrated, accurate predictions of future events.  
 
-            Your interview question is:
+            </task>
+
+            <context> Your interview question is: 
             {question.question_text}
 
             Question background:
             {question.background_info}
-
 
             This question's outcome will be determined by the specific criteria below. These criteria have not yet been satisfied:
             {question.resolution_criteria}
 
             {question.fine_print}
 
+            You have been provided with context from a research assistant. Their research says: 
+            {research} 
 
-            Your research assistant says:
-            {research}
+            Today is {datetime.now().strftime("%Y-%m-%d")}
 
-            Today is {datetime.now().strftime("%Y-%m-%d")}.
+            </context>
 
-            Before answering, write:
-            (a) BASE RATE: How often do similar events typically happen? What's the historical frequency?
-            (b) The time left until the outcome is known
-            (c) How much should current evidence and trends adjust your view from the base rate?            
-            (d) A brief scenario for No outcome
-            (e) A brief scenario for Yes outcome
-        
-            Remember that extreme predictions (below 10% or above 90%) are usually overconfident.
+            <thinking_process> Before providing your forecasts, take the following steps:
 
-            FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
+            1. **Initial Assessment**
+            - Restate the event in your own words, aligned with the resolution criteria
 
-            You write your rationale, carefully weighing historical patterns against current evidence.
+            2. **Base Rates**
+            - Identify at least 1-2 relevant reference classes and their base rates
+            - How often do similar events typically happen? What's the historical frequency?
 
-            Consider the specific domain: mature fields may change slowly, while emerging technologies and social phenomena may change rapidly.
-            
+            3. **External Forecast Research**
+            - Check Metaculus, Good Judgment Open, Manifold, Polymarket, PredictIt, or other reputable platforms
+            - Record consensus forecasts if available; note calibration/quality of each source
+            - If unavailable, acknowledge and proceed without them
+
+            4. **Systematic Analysis**
+            - List **factors increasing values for answer**. How could it be higher?
+            - List **factors decreasing values for answer**. How could it be lower?
+            - Break into sub-problems and identify causal forces
+            - Weigh evidence quality: prioritize hard data over speculation
+
+            5. **Aggregation & Pressure-Testing**
+            - Start with base rate
+            - Adjust with evidence and external forecasts (Bayesian-style updating)
+            - Apply “consider the opposite” to stress test your forecast
+            - Perform sensitivity check: what info would swing your estimate by ≥20 percentage points?
+
+            6. **Bias Mitigation Checklist** 
+            - Gullibility: Have I verified key claims from multiple sources? 
+            - Availability: Am I overweighting recent/memorable events?
+            - Anchoring: Did I consider the full 0-100% range before settling?
+            - Acquiescence: Am I defaulting to "yes" or high probabilities?
+            - Confirmation: Did I genuinely seek disconfirming evidence?
+            - Overconfidence: Are my confidence intervals too narrow? 
+
+            For each bias detected, explicitly state your correction.
+
+            7. **Calibration**
+            - Avoid extreme values unless supported by extraordinary evidence (Cromwell’s Rule)
+            - Document uncertainty range
+
+            8. **Forecast Quality Check**
+            - Info quality: [Low/Medium/High] - Do I have enough relevant information? 
+            - Predictability: [Low/Medium/High] - Is this event inherently forecastable? 
+            - Confidence: [Low/Medium/High] - How confident am I in this specific forecast? 
+            - Key uncertainties: [List 1-2 factors that could swing the forecast most]
+
+            </thinking_process>
+
+            <finalization_format> Provide:
+            A) **Rationale (concise, decision-useful; no long chain-of-thought math)**
+            - Outside view (reference classes & base rates)
+            - Inside view (current evidence)
+            - External forecasts (with quality notes)
+            - Cruxes & leading indicators
+            - Key uncertainties
+
+            B) **Forecast Outputs (strict order & formats)**
             The last thing you write is your final answer as: "Probability: ZZ%", 0-100
+
+            </finalization_format>
             """
         )
         reasoning = await self.get_llm("default", "llm").invoke(prompt)
@@ -217,8 +274,9 @@ class FallTemplateBot2025(ForecastBot):
             reasoning, BinaryPrediction, model=self.get_llm("parser", "llm")
         )
 
+        # Avoid extreme predictions
         decimal_pred = max(0.01, min(0.99, binary_prediction.prediction_in_decimal))
-        
+
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {decimal_pred}"
         )
@@ -229,45 +287,103 @@ class FallTemplateBot2025(ForecastBot):
     ) -> ReasonedPrediction[PredictedOptionList]:
         prompt = clean_indents(
             f"""
-            You are a professional forecaster interviewing for a job.
+            <task> You are an elite superforecaster with extensive experience in Tetlock-style methods. Your goal is to make calibrated, accurate predictions of future events.  
 
-            Your interview question is:
+            </task>
+
+            <context> Your interview question is: 
             {question.question_text}
 
-            The options are: {question.options}
-
-
-            Background:
+            Question background:
             {question.background_info}
 
+            This question's outcome will be determined by the specific criteria below. These criteria have not yet been satisfied:
             {question.resolution_criteria}
 
             {question.fine_print}
 
+            You have been provided with context from a research assistant. Their research says: 
+            {research} 
 
-            Your research assistant says:
-            {research}
+            Today is {datetime.now().strftime("%Y-%m-%d")}
 
-            Today is {datetime.now().strftime("%Y-%m-%d")}.
+            </context>
 
-            Before answering you write:
-            (a) The time left until the outcome to the question is known.
-            (b) The status quo outcome if nothing changed.
-            (c) A description of an scenario that results in an unexpected outcome.
+            <thinking_process> Before providing your forecasts, take the following steps:
 
-            FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
+            1. **Initial Assessment**
+            - Restate the event in your own words, aligned with the resolution criteria
 
-            You write your rationale remembering that (1) good forecasters put extra weight on the status quo outcome since the world changes slowly most of the time, and (2) good forecasters leave some moderate probability on most options to account for unexpected outcomes.
+            2. **Base Rates**
+            - Identify at least 1-2 relevant reference classes and their base rates
+            - How often do similar events typically happen? What's the historical frequency?
 
-            Consider the specific domain: mature fields may change slowly, while emerging technologies and social phenomena may change rapidly.
+            3. **External Forecast Research**
+            - Check Metaculus, Good Judgment Open, Manifold, Polymarket, PredictIt, or other reputable platforms
+            - Record consensus forecasts if available; note calibration/quality of each source
+            - If unavailable, acknowledge and proceed without them
 
+            4. **Systematic Analysis**
+            - List **factors increasing values for answer**. How could it be higher?
+            - List **factors decreasing values for answer**. How could it be lower?
+            - Break into sub-problems and identify causal forces
+            - Weigh evidence quality: prioritize hard data over speculation
+
+            5. **Aggregation & Pressure-Testing**
+            - Start with base rate
+            - Adjust with evidence and external forecasts (Bayesian-style updating)
+            - Apply “consider the opposite” to stress test your forecast
+            - Perform sensitivity check: what info would swing your estimate by ≥20 percentage points?
+
+            6. **Bias Mitigation Checklist** 
+            - Gullibility: Have I verified key claims from multiple sources? 
+            - Availability: Am I overweighting recent/memorable events?
+            - Anchoring: Did I consider the full 0-100% range before settling?
+            - Acquiescence: Am I defaulting to "yes" or high probabilities?
+            - Confirmation: Did I genuinely seek disconfirming evidence?
+            - Overconfidence: Are my confidence intervals too narrow? 
+
+            For each bias detected, explicitly state your correction.
+
+            7. **Calibration**
+            - Avoid extreme values unless supported by extraordinary evidence (Cromwell’s Rule)
+            - Document uncertainty range
+
+            8. **Forecast Quality Check**
+            - Info quality: [Low/Medium/High] - Do I have enough relevant information? 
+            - Predictability: [Low/Medium/High] - Is this event inherently forecastable? 
+            - Confidence: [Low/Medium/High] - How confident am I in this specific forecast? 
+            - Key uncertainties: [List 1-2 factors that could swing the forecast most]
+
+            </thinking_process>
+
+            <finalization_format> Provide:
+            A) **Rationale (concise, decision-useful; no long chain-of-thought math)**
+            - Outside view (reference classes & base rates)
+            - Inside view (current evidence)
+            - External forecasts (with quality notes)
+            - Cruxes & leading indicators
+            - Key uncertainties
+
+            B) **Forecast Outputs (strict order & formats)**
             The last thing you write is your final probabilities for the N options in this order {question.options} as:
             Option_A: Probability_A
             Option_B: Probability_B
             ...
             Option_N: Probability_N
+            </finalization_format>
             """
         )
+        reasoning = await self.get_llm("default", "llm").invoke(prompt)
+        logger.info(f"Reasoning for URL {question.page_url}: {reasoning}")
+        predicted_option_list: PredictedOptionList = await structure_output(
+            reasoning, PredictedOptionList, model=self.get_llm("parser", "llm")
+        )
+        logger.info(
+            f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
+        )
+        return ReasonedPrediction(prediction_value=predicted_option_list, reasoning=reasoning)
+
         parsing_instructions = clean_indents(
             f"""
             Make sure that all option names are one of the following:
@@ -298,61 +414,105 @@ class FallTemplateBot2025(ForecastBot):
         )
         prompt = clean_indents(
             f"""
-            You are a professional forecaster interviewing for a job.
+            <task> You are an elite superforecaster with extensive experience in Tetlock-style methods. Your goal is to make calibrated, accurate predictions of future events.  
 
-            Your interview question is:
+            </task>
+
+            <context> Your interview question is: 
             {question.question_text}
 
-            Background:
+            Question background:
             {question.background_info}
 
+            This question's outcome will be determined by the specific criteria below. These criteria have not yet been satisfied:
             {question.resolution_criteria}
 
             {question.fine_print}
 
             Units for answer: {question.unit_of_measure if question.unit_of_measure else "Not stated (please infer this)"}
 
-            Your research assistant says:
-            {research}
+            You have been provided with context from a research assistant. Their research says: 
+            {research} 
 
-            Today is {datetime.now().strftime("%Y-%m-%d")}.
+            Today is {datetime.now().strftime("%Y-%m-%d")}
 
-            {lower_bound_message}
-            {upper_bound_message}
+            </context>
 
+            <thinking_process> Before providing your forecasts, take the following steps:
+
+            1. **Initial Assessment**
+            - Restate the event in your own words, aligned with the resolution criteria
+
+            2. **Base Rates**
+            - Identify at least 1-2 relevant reference classes and their base rates
+            - How often do similar events typically happen? What's the historical frequency?
+
+            3. **External Forecast Research**
+            - Check Metaculus, Good Judgment Open, Manifold, Polymarket, PredictIt, or other reputable platforms
+            - Record consensus forecasts if available; note calibration/quality of each source
+            - If unavailable, acknowledge and proceed without them
+
+            4. **Systematic Analysis**
+            - List **factors increasing values for answer**. How could it be higher?
+            - List **factors decreasing values for answer**. How could it be lower?
+            - Break into sub-problems and identify causal forces
+            - Weigh evidence quality: prioritize hard data over speculation
+
+            5. **Aggregation & Pressure-Testing**
+            - Start with base rate
+            - Adjust with evidence and external forecasts (Bayesian-style updating)
+            - Apply “consider the opposite” to stress test your forecast
+            - Perform sensitivity check: what info would swing your estimate by ≥20 percentage points?
+
+            6. **Bias Mitigation Checklist** 
+            - Gullibility: Have I verified key claims from multiple sources? 
+            - Availability: Am I overweighting recent/memorable events?
+            - Anchoring: Did I consider the full 0-100% range before settling?
+            - Acquiescence: Am I defaulting to "yes" or high probabilities?
+            - Confirmation: Did I genuinely seek disconfirming evidence?
+            - Overconfidence: Are my confidence intervals too narrow? 
+
+            For each bias detected, explicitly state your correction.
+
+            7. **Calibration**
+            - Avoid extreme values unless supported by extraordinary evidence (Cromwell’s Rule)
+            - Document uncertainty range
+
+            8. **Forecast Quality Check**
+            - Info quality: [Low/Medium/High] - Do I have enough relevant information? 
+            - Predictability: [Low/Medium/High] - Is this event inherently forecastable? 
+            - Confidence: [Low/Medium/High] - How confident am I in this specific forecast? 
+            - Key uncertainties: [List 1-2 factors that could swing the forecast most]
+
+            </thinking_process>
+
+            <finalization_format> Provide:
+            A) **Rationale (concise, decision-useful; no long chain-of-thought math)**
+            - Outside view (reference classes & base rates)
+            - Inside view (current evidence)
+            - External forecasts (with quality notes)
+            - Cruxes & leading indicators
+            - Key uncertainties
+
+            B) **Forecast Outputs (strict order & formats)**
             Formatting Instructions:
-            - Please notice the units requested (e.g. whether you represent a number as 1,000,000 or 1 million).
-            - Never use scientific notation.
-            - Always start with a smaller number (more negative if negative) and then increase from there
-
-            Before answering you write:
-            (a) The time left until the outcome to the question is known.
-            (b) The outcome if nothing changed.
-            (c) The outcome if the current trend continued.
-            (d) The expectations of experts and markets.
-            (e) A brief description of an unexpected scenario that results in a low outcome.
-            (f) A brief description of an unexpected scenario that results in a high outcome.
-
-            Consider the specific domain: mature fields may change slowly, while emerging technologies and social phenomena may change rapidly.
-
-            You remind yourself that good forecasters are humble and set wide 90/10 confidence intervals to account for unknown unknowns.
-
-            IMPORTANT: Your 10th-90th percentile range should be WIDE enough that you'd only be surprised 
-            20% of the time if the outcome falls outside it. Most people are overconfident - err on the 
-            side of wider intervals. Ask yourself: "Would I bet money that the outcome will be between 
-            my 10th and 90th percentiles?"
-
-            FINAL CHECK: What could make your prediction completely wrong? Are you missing something obvious?
-
+                    - Please notice the units requested (e.g. whether you represent a number as 1,000,000 or 1 million).
+                    - Never use scientific notation.
+                    - Always start with a smaller number (more negative if negative) and then increase from there
+            IMPORTANT: Your 10th-90th percentile range should be WIDE enough that you'd only be surprised
+                    20% of the time if the outcome falls outside it. Most people are overconfident - err on the
+                    side of wider intervals. Ask yourself: "Would I bet money that the outcome will be between
+                    my 10th and 90th percentiles?"
             The last thing you write is your final answer as:
-            "
-            Percentile 10: XX
-            Percentile 20: XX
-            Percentile 40: XX
-            Percentile 60: XX
-            Percentile 80: XX
-            Percentile 90: XX
-            "
+                    "
+                    Percentile 10: XX
+                    Percentile 20: XX
+                    Percentile 40: XX
+                    Percentile 60: XX
+                    Percentile 80: XX
+                    Percentile 90: XX
+                    "
+            </finalization_format>
             """
         )
         reasoning = await self.get_llm("default", "llm").invoke(prompt)
