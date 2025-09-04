@@ -130,7 +130,8 @@ class FallTemplateBot2025(ForecastBot):
                 - What is the distribution of historical outcomes for these key aspects, including base rates
                 - What is unique about this situation relative to other historical precedents
 
-                Prioritize high-quality sources of news and information.
+                Prioritize high-quality sources of news and information. Include 3–6 citations with titles + dates. Prioritize primary or highly reputable outlets.
+                Do not invent URLs. If a claim is uncertain, say so and omit the citation.
 
                 Take your time, and do a deep search to pull out all necessary information.
                 </approach>
@@ -429,7 +430,9 @@ class FallTemplateBot2025(ForecastBot):
             {question.fine_print}
 
             Units for answer: {question.unit_of_measure if question.unit_of_measure else "Not stated (please infer this)"}
-
+            Upper bound hint: {upper_bound_message}
+            Lower bound hint: {lower_bound_message}
+            
             You have been provided with context from a research assistant. Their research says: 
             {research} 
 
@@ -589,17 +592,17 @@ if __name__ == "__main__":
         publish_reports_to_metaculus=True, ## TOGGLE
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
-        # llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
-        #     "default": GeneralLlm(
-        #         model="openrouter/openai/gpt-4o", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
-        #         temperature=0.3,
-        #         timeout=40,
-        #         allowed_tries=2,
-        #     ),
+        llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
+             "default": GeneralLlm(
+                 model="openrouter/openai/gpt-5", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
+                 temperature=0.3,
+                 timeout=40,
+                 allowed_tries=2,
+             ),
         #     "summarizer": "openai/gpt-4o-mini",
-        #     "researcher": "asknews/deep-research/low",
+             "researcher": "asknews/deep-research/low",
         #     "parser": "openai/gpt-4o-mini",
-        # },
+        },
     )
 
     if run_mode == "tournament":
