@@ -382,7 +382,6 @@ class FallTemplateBot2025(ForecastBot):
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
         )
-        return ReasonedPrediction(prediction_value=predicted_option_list, reasoning=reasoning)
 
         parsing_instructions = clean_indents(
             f"""
