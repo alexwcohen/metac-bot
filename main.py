@@ -310,7 +310,7 @@ class FallTemplateBot2025(ForecastBot):
             - Note the reliability/calibration of each source.
             
             4. Case-Specific Analysis (Inside View)
-            - List factors pushing probabilities up vs. down.
+            - List factors pushing values up vs. down.
             - Break into sub-problems if useful.
             - Weigh evidence quality (data > speculation).
             
@@ -426,7 +426,7 @@ class FallTemplateBot2025(ForecastBot):
             - Note the reliability/calibration of each source.
             
             4. Case-Specific Analysis (Inside View)
-            - List factors pushing probabilities up vs. down.
+            - List factors pushing values up vs. down.
             - Break into sub-problems if useful.
             - Weigh evidence quality (data > speculation).
             
