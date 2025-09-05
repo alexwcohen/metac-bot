@@ -596,7 +596,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "asknews/deep-research/high",
+        #     "researcher": "asknews/deep-research/high",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
