@@ -27,7 +27,10 @@ logger = logging.getLogger(__name__)
 
 class FallTemplateBot2025(ForecastBot):
     """
-    This is a copy of the template bot for Fall 2025 Metaculus AI Tournament.
+    This is a modified version of the template bot for Fall 2025 Metaculus AI Tournament.
+
+    Original text from template: 
+    
     This bot is what is used by Metaculus in our benchmark, but is also provided as a template for new bot makers.
     This template is given as-is, and though we have covered most test cases
     in forecasting-tools it may be worth double checking key components locally.
@@ -105,6 +108,61 @@ class FallTemplateBot2025(ForecastBot):
     )
     _concurrency_limiter = asyncio.Semaphore(_max_concurrent_questions)
 
+    async def generate_concise_comment(self, full_reasoning: str) -> str:
+        """Generate a concise comment from the full reasoning for Metaculus posting."""
+        prompt = clean_indents(
+            f"""
+            <task> Transform this reasoning chain into a high-quality Metaculus comment following these guidelines.
+            </task>
+            
+            <original_reasoning>
+            Original reasoning:
+            {full_reasoning}
+            </original_reasoning>
+            
+            <guidance>
+            Length:
+            - Target: 250-400 words (absolutely no more than 500 words) 
+            - From your full reasoning, extract only the most forecast-relevant insights 
+            - Select only the 3-5 strongest sources of evidence
+            
+            Structure:
+            1. Start with a clear position statement
+            2. Present 3-5 key pieces of evidence, using bullet points for clarity 
+            3. Include specific numbers, dates, and sources with hyperlinks
+            4. End with your updated forecast range and key uncertainties 
+            
+            Tone and style:
+            - Be intellectually humble: acknowledge what convinced you, what you're uncertain about 
+            - Use phrases like "This evidence suggests..." 
+            - Explicitly state confidence levels and probability estimates 
+            
+            Content: 
+            - Lead with the most decision-relevant information 
+            - Include contrarian evidence if it exists 
+            - Quantify whenever possible (percentages, specific values, ranges) 
+            - Flag unverified information clearly 
+            - Explain why evidence matters for the forecast
+            
+            Compression techniques:
+            - Replace lengthy explanations with "Based on [source/method]..." 
+            - Combine related points into single bullets 
+            - Use ranges instead of listing all scenarios 
+            - Link to sources rather than describing methodology 
+            - State conclusions directly, minimize setup 
+            
+            Avoid: 
+            - Unnecessary hedging that doesn't add information 
+            - Repetition of widely known facts 
+            - Overconfidence or dismissiveness of other views 
+            - Extensive methodology explanations (just note the approach briefly)
+            </guidance>
+            """
+        )
+        
+        concise_comment = await self.get_llm("parser", "llm").invoke(prompt)
+        return concise_comment.strip()
+    
     async def run_research(self, question: MetaculusQuestion) -> str:
         async with self._concurrency_limiter:
             research = ""
@@ -268,19 +326,22 @@ class FallTemplateBot2025(ForecastBot):
             </finalization_format>
             """
         )
-        reasoning = await self.get_llm("default", "llm").invoke(prompt)
-        logger.info(f"Reasoning for URL {question.page_url}: {reasoning}")
+        full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
+        logger.info(f"Full reasoning for URL {question.page_url}: {full_reasoning}")
         binary_prediction: BinaryPrediction = await structure_output(
-            reasoning, BinaryPrediction, model=self.get_llm("parser", "llm")
+            full_reasoning, BinaryPrediction, model=self.get_llm("parser", "llm")
         )
 
+        concise_comment = await self.generate_concise_comment(full_reasoning)
+        logger.info(f"Concise comment for URL {question.page_url}: {concise_comment}")
+        
         # Avoid extreme predictions
         decimal_pred = max(0.01, min(0.99, binary_prediction.prediction_in_decimal))
 
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {decimal_pred}"
         )
-        return ReasonedPrediction(prediction_value=decimal_pred, reasoning=reasoning)
+        return ReasonedPrediction(prediction_value=decimal_pred, reasoning=concise_comment)
 
     async def _run_forecast_on_multiple_choice(
         self, question: MultipleChoiceQuestion, research: str
@@ -373,10 +434,10 @@ class FallTemplateBot2025(ForecastBot):
             </finalization_format>
             """
         )
-        reasoning = await self.get_llm("default", "llm").invoke(prompt)
-        logger.info(f"Reasoning for URL {question.page_url}: {reasoning}")
+        full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
+        logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
         predicted_option_list: PredictedOptionList = await structure_output(
-            reasoning, PredictedOptionList, model=self.get_llm("parser", "llm")
+            full_reasoning, PredictedOptionList, model=self.get_llm("parser", "llm")
         )
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
@@ -389,10 +450,10 @@ class FallTemplateBot2025(ForecastBot):
             The text you are parsing may prepend these options with some variation of "Option" which you should remove if not part of the option names I just gave you.
             """
         )
-        reasoning = await self.get_llm("default", "llm").invoke(prompt)
-        logger.info(f"Reasoning for URL {question.page_url}: {reasoning}")
+        full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
+        logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
         predicted_option_list: PredictedOptionList = await structure_output(
-            text_to_structure=reasoning,
+            text_to_structure=full_reasoning,
             output_type=PredictedOptionList,
             model=self.get_llm("parser", "llm"),
             additional_instructions=parsing_instructions,
@@ -400,8 +461,12 @@ class FallTemplateBot2025(ForecastBot):
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
         )
+
+        concise_comment = await self.generate_concise_comment(full_reasoning)
+        logger.info(f"Concise comment for URL {question.page_url}: {concise_comment}")
+        
         return ReasonedPrediction(
-            prediction_value=predicted_option_list, reasoning=reasoning
+            prediction_value=predicted_option_list, reasoning=concise_comment
         )
 
     async def _run_forecast_on_numeric(
@@ -513,16 +578,20 @@ class FallTemplateBot2025(ForecastBot):
             </finalization_format>
             """
         )
-        reasoning = await self.get_llm("default", "llm").invoke(prompt)
-        logger.info(f"Reasoning for URL {question.page_url}: {reasoning}")
+        full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
+        logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
         percentile_list: list[Percentile] = await structure_output(
-            reasoning, list[Percentile], model=self.get_llm("parser", "llm")
+            full_reasoning, list[Percentile], model=self.get_llm("parser", "llm")
         )
         prediction = NumericDistribution.from_question(percentile_list, question)
         logger.info(
             f"Forecasted URL {question.page_url} with prediction: {prediction.declared_percentiles}"
         )
-        return ReasonedPrediction(prediction_value=prediction, reasoning=reasoning)
+
+        concise_comment = await self.generate_concise_comment(full_reasoning)
+        logger.info(f"Concise comment for URL {question.page_url}: {concise_comment}")
+        
+        return ReasonedPrediction(prediction_value=prediction, reasoning=concise_comment)
 
     def _create_upper_and_lower_bound_messages(
         self, question: NumericQuestion
