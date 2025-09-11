@@ -188,6 +188,8 @@ class FallTemplateBot2025(ForecastBot):
                 - What is the distribution of historical outcomes for these key aspects, including base rates
                 - What is unique about this situation relative to other historical precedents
 
+                Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
+
                 Prioritize high-quality sources of news and information. Include 3–6 citations with titles + dates. Prioritize primary or highly reputable outlets.
                 Do not invent URLs. If a claim is uncertain, say so and omit the citation.
 
