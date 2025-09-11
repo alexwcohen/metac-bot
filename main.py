@@ -665,7 +665,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "asknews/deep-research/custom":
+              "researcher": "asknews/deep-research/custom",
                      # Custom configuration for Metaculus users
                     research = await AskNewsSearcher().get_formatted_deep_research(
                         question.question_text,
