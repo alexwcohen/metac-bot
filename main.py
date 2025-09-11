@@ -665,7 +665,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "openai/gpt-4o-search-preview",
+        #     "researcher": "openai/gpt-4o-search-preview",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
