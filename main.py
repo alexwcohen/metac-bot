@@ -212,14 +212,14 @@ class FallTemplateBot2025(ForecastBot):
                     question.question_text,
                     sources=["asknews", "google"],
                     search_depth=2,
-                    max_depth=4,
+                    max_depth=2,
                 )
             elif researcher == "asknews/deep-research/high-depth":
                 research = await AskNewsSearcher().get_formatted_deep_research(
                     question.question_text,
                     sources=["asknews", "google"],
-                    search_depth=4,
-                    max_depth=6,
+                    search_depth=2,
+                    max_depth=2,
                 )
             elif researcher.startswith("smart-searcher"):
                 model_name = researcher.removeprefix("smart-searcher/")
@@ -665,7 +665,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-        #     "researcher": "openai/gpt-4o-search-preview",
+              "researcher": "asknews/deep-research/medium-depth",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
