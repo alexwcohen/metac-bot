@@ -29,8 +29,15 @@ class FallTemplateBot2025(ForecastBot):
     """
     This is a modified version of the template bot for Fall 2025 Metaculus AI Tournament.
 
+    Main modifications:
+    - Re-write prompts for "forecaster" and "researcher" to incorporate forecasting principles
+    - Use gpt-5 for "forecaster" - seems like the most powerful model right now
+    - Use gpt-4 with internet search for "researcher" - to collect more up-to-date information
+    - Shorten comments posted to Metaculus
+
     Original text from template: 
     
+    This is a copy of the template bot for Fall 2025 Metaculus AI Tournament.
     This bot is what is used by Metaculus in our benchmark, but is also provided as a template for new bot makers.
     This template is given as-is, and though we have covered most test cases
     in forecasting-tools it may be worth double checking key components locally.
@@ -55,7 +62,7 @@ class FallTemplateBot2025(ForecastBot):
     Only the research and forecast functions need to be implemented in ForecastBot subclasses,
     though you may want to override other ones.
     In this example, you can change the prompts to be whatever you want since,
-    structure_output uses an LLM to intelligently reformat the output into the needed structure.
+    structure_output uses an LLMto intelligently reformat the output into the needed structure.
 
     By default (i.e. 'tournament' mode), when you run this script, it will forecast on any open questions for the
     MiniBench and Seasonal AIB tournaments. If you want to forecast on only one or the other, you can remove one
@@ -74,7 +81,7 @@ class FallTemplateBot2025(ForecastBot):
                 allowed_tries=2,
             ),
             "summarizer": "openai/gpt-4o-mini",
-            "researcher": "openrouter/openai/gpt-4o-search-preview",
+            "researcher": "asknews/deep-research/low",
             "parser": "openai/gpt-4o-mini",
         },
     )
