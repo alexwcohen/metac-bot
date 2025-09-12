@@ -664,7 +664,7 @@ if __name__ == "__main__":
     template_bot = FallTemplateBot2025(
         research_reports_per_question=1,
         predictions_per_research_report=5,
-        use_research_summary_to_forecast=False,
+        use_research_summary_to_forecast=True,
         publish_reports_to_metaculus=True, ## TOGGLE
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
