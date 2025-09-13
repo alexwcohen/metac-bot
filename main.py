@@ -241,6 +241,7 @@ class FallTemplateBot2025(ForecastBot):
                     num_sites_per_search=10, 
                     use_advanced_filters=False,
                 )
+                logger.info(f"Running SmartSearcher with model {model_name} for question {question.page_url}")
                 research = await searcher.invoke(prompt)
             elif not researcher or researcher == "None":
                 research = ""
@@ -676,7 +677,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "openrouter/openai/gpt-5:online",
+              "researcher": "smart-searcher/openrouter/openai/gpt-5:online",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
