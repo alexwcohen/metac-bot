@@ -32,7 +32,7 @@ class FallTemplateBot2025(ForecastBot):
     Main modifications:
     - Re-write prompts for "forecaster" and "researcher" to incorporate forecasting principles
     - Use gpt-5 for "forecaster" - seems like the most powerful model right now
-    - Use gpt-4 with internet search for "researcher" - to collect more up-to-date information
+    - Use gpt-5 with internet search for "researcher" - to collect more up-to-date information
     - Shorten comments posted to Metaculus
 
     Original text from template: 
@@ -195,6 +195,8 @@ class FallTemplateBot2025(ForecastBot):
                 - What is the distribution of historical outcomes for these key aspects, including base rates
                 - What is unique about this situation relative to other historical precedents
 
+                Check recent news articles for relevant information, especially for questions where there's likely to be timely information.
+
                 Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
 
                 Prioritize high-quality sources of news and information. Include 3–6 citations with titles + dates. Prioritize primary or highly reputable outlets.
@@ -241,7 +243,6 @@ class FallTemplateBot2025(ForecastBot):
                     num_sites_per_search=10, 
                     use_advanced_filters=False,
                 )
-                logger.info(f"Running SmartSearcher with model {model_name} for question {question.page_url}")
                 research = await searcher.invoke(prompt)
             elif not researcher or researcher == "None":
                 research = ""
@@ -677,7 +678,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "smart-searcher/openrouter/openai/gpt-5:online",
+              "researcher": "openrouter/openai/gpt-5:online",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
