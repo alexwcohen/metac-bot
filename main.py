@@ -676,7 +676,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "openrouter/openai/gpt-5-search-preview",
+              "researcher": "openrouter/openai/gpt-4o-search-preview",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
