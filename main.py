@@ -137,7 +137,7 @@ class FallTemplateBot2025(ForecastBot):
             1. Start with a clear position statement
             2. Present 3-5 key pieces of evidence, using bullet points for clarity 
             3. Include specific numbers, dates, and sources with hyperlinks
-            4. End with your updated forecast range and key uncertainties 
+            4. End with your updated forecast range and key uncertainties
             
             Tone and style:
             - Be intellectually humble: acknowledge what convinced you, what you're uncertain about 
@@ -196,11 +196,14 @@ class FallTemplateBot2025(ForecastBot):
                 - What makes this case unique compared to precedent
                 
                 Recency:
-                - Check recent news articles first. Always include at least one citation from the last 30 days if relevant news exists. 
-                - If no recent coverage exists, explicitly say so.
-                
+                - Always scan for recent coverage first.
+                - If relevant news exists, the **first citation must be from within the last 30 days**.
+                - If no coverage exists in that window, explicitly state: "No relevant coverage found in the last 30 days."
+
                 Benchmarks:
-                - Check consensus forecasts (Metaculus, GJO, Manifold, betting sites) if available.
+                - Search Metaculus for related or duplicate questions and report the current median forecast (include link).
+                - Check if Good Judgment Open, Manifold, or betting markets have related questions; summarize their consensus or odds if available.
+                - Always include at least one benchmark if any relevant question exists.  
                 
                 Sourcing:
                 - Use 3–6 citations from primary or highly reputable outlets. 
