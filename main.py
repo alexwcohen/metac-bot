@@ -188,19 +188,24 @@ class FallTemplateBot2025(ForecastBot):
                 Additional clarifications: {question.fine_print}
                 </context>
 
-                <approach> You should learn:
-                - The basic up-to-date summary of the situation
-                - Who are the important people or other actors involved
-                - What are the key aspects of the situation that could influence the outcome
-                - What is the distribution of historical outcomes for these key aspects, including base rates
-                - What is unique about this situation relative to other historical precedents
-
-                Check recent news articles for relevant information, especially for questions where there's likely to be timely information.
-
-                Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
-
-                Prioritize high-quality sources of news and information. Include 3–6 citations with titles + dates. Prioritize primary or highly reputable outlets.
-                Do not invent URLs. If a claim is uncertain, say so and omit the citation.
+                <approach> Gather:
+                - A clear, up-to-date summary of the situation
+                - The key people, organizations, or actors involved
+                - Factors that could influence the outcome
+                - Historical distributions/base rates for similar cases
+                - What makes this case unique compared to precedent
+                
+                Recency:
+                - Check recent news articles first. Always include at least one citation from the last 30 days if relevant news exists. 
+                - If no recent coverage exists, explicitly say so.
+                
+                Benchmarks:
+                - Check consensus forecasts (Metaculus, GJO, Manifold, betting sites) if available.
+                
+                Sourcing:
+                - Use 3–6 citations from primary or highly reputable outlets. 
+                - Provide citations in this format: [Source | Title | Date | URL].
+                - Do not invent URLs. If uncertain, state uncertainty and omit the link.
 
                 Take your time, and do a deep search to pull out all necessary information.
                 </approach>
