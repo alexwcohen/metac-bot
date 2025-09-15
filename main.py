@@ -452,6 +452,8 @@ class FallTemplateBot2025(ForecastBot):
             Option_B: Probability_B
             ...
             Option_N: Probability_N
+
+            Make sure that these probabilities sum to 1.
             </finalization_format>
             """
         )
@@ -686,7 +688,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "asknews/deep-research/medium-depth",
+              "researcher": "asknews/deep-research/medium-depth",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
