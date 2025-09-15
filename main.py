@@ -696,7 +696,7 @@ if __name__ == "__main__":
 
     async def staggered_forecast(bot, tournament_id):
         # Get all open questions from the tournament
-        questions = await MetaculusApi.get_questions_from_tournament(tournament_id)
+        questions = await MetaculusApi.get_all_open_questions_from_tournament(tournament_id)
         reports = []
         for q in questions:
             # Forecast on one question at a time
