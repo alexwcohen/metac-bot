@@ -680,13 +680,13 @@ if __name__ == "__main__":
         skip_previously_forecasted_questions=True,
         llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
              "default": GeneralLlm(
-                 model="openrouter/openai/gpt-5", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
+                 model="openrouter/openai/gpt-5:online", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
                  temperature=0.2,
                  timeout=40,
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "openrouter/openai/gpt-5:online",
+              "asknews/deep-research/medium-depth",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
