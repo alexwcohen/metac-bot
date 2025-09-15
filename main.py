@@ -32,7 +32,7 @@ class FallTemplateBot2025(ForecastBot):
     Main modifications:
     - Re-write prompts for "forecaster" and "researcher" to incorporate forecasting principles
     - Use gpt-5 for "forecaster" - seems like the most powerful model right now
-    - Use gpt-5 with internet search for "researcher" - to collect more up-to-date information
+    - Use asknews for "researcher" - to collect more up-to-date information
     - Shorten comments posted to Metaculus
 
     Original text from template: 
