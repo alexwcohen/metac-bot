@@ -364,6 +364,15 @@ class FallTemplateBot2025(ForecastBot):
         )
         return ReasonedPrediction(prediction_value=decimal_pred, reasoning=concise_comment)
 
+    def _normalize_probabilities(self, probs: list[float]) -> list[float]:
+        # Clamp into [0.001, 0.999]
+        clamped = [min(0.999, max(0.001, p)) for p in probs]
+        total = sum(clamped)
+        if total == 0:
+            # fallback: uniform distribution
+            return [1.0 / len(probs)] * len(probs)
+        return [p / total for p in clamped]
+    
     async def _run_forecast_on_multiple_choice(
         self, question: MultipleChoiceQuestion, research: str
     ) -> ReasonedPrediction[PredictedOptionList]:
@@ -483,6 +492,13 @@ class FallTemplateBot2025(ForecastBot):
             f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
         )
 
+        # Normalize probabilities to meet Metaculus API requirements
+        probs = [opt.probability for opt in predicted_option_list.options]
+        normalized = self._normalize_probabilities(probs)
+        for i, opt in enumerate(predicted_option_list.options):
+            opt.probability = normalized[i]
+
+        
         concise_comment = await self.generate_concise_comment(full_reasoning)
         logger.info(f"Concise comment for URL {question.page_url}: {concise_comment}")
         
