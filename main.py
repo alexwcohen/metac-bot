@@ -230,8 +230,8 @@ class FallTemplateBot2025(ForecastBot):
                 research = await AskNewsSearcher().get_formatted_deep_research(
                     question.question_text,
                     sources=["asknews"],
-                    search_depth=1,
-                    max_depth=1,
+                    search_depth=2,
+                    max_depth=2,
                     model="deepseek-basic"
                 )
             elif researcher == "asknews/deep-research/high-depth":
@@ -688,7 +688,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "asknews/deep-research/medium-depth",
+              "researcher": "asknews/news-summaries",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
