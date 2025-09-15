@@ -364,15 +364,6 @@ class FallTemplateBot2025(ForecastBot):
         )
         return ReasonedPrediction(prediction_value=decimal_pred, reasoning=concise_comment)
 
-    def _normalize_probabilities(self, probs: list[float]) -> list[float]:
-        # Clamp into [0.001, 0.999]
-        clamped = [min(0.999, max(0.001, p)) for p in probs]
-        total = sum(clamped)
-        if total == 0:
-            # fallback: uniform distribution
-            return [1.0 / len(probs)] * len(probs)
-        return [p / total for p in clamped]
-    
     async def _run_forecast_on_multiple_choice(
         self, question: MultipleChoiceQuestion, research: str
     ) -> ReasonedPrediction[PredictedOptionList]:
@@ -466,29 +457,32 @@ class FallTemplateBot2025(ForecastBot):
         )
         full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
         logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
+        predicted_option_list: PredictedOptionList = await structure_output(
+            full_reasoning, PredictedOptionList, model=self.get_llm("parser", "llm")
+        )
+        logger.info(
+            f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
+        )
+
         parsing_instructions = clean_indents(
             f"""
             Make sure that all option names are one of the following:
             {question.options}
-            The text you are parsing may prepend these options with some variation of "Option"
-            which you should remove if not part of the option names I just gave you.
+            The text you are parsing may prepend these options with some variation of "Option" which you should remove if not part of the option names I just gave you.
             """
         )
-
-        # Parse once (with instructions)
+        full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
+        logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
         predicted_option_list: PredictedOptionList = await structure_output(
             text_to_structure=full_reasoning,
             output_type=PredictedOptionList,
             model=self.get_llm("parser", "llm"),
             additional_instructions=parsing_instructions,
         )
+        logger.info(
+            f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
+        )
 
-        # Normalize
-        probs = [opt.probability for opt in predicted_option_list.options]
-        normalized = self._normalize_probabilities(probs)
-        for i, opt in enumerate(predicted_option_list.options):
-            opt.probability = normalized[i]
-        
         concise_comment = await self.generate_concise_comment(full_reasoning)
         logger.info(f"Concise comment for URL {question.page_url}: {concise_comment}")
         
@@ -692,7 +686,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "asknews/deep-research/medium-depth",
+              "researcher": "openrouter/openai/gpt-5:online",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
