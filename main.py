@@ -1,6 +1,7 @@
 import argparse
 import asyncio
 import logging
+import random
 from datetime import datetime
 from typing import Literal
 
@@ -114,7 +115,7 @@ class FallTemplateBot2025(ForecastBot):
         1  # Set this to whatever works for your search-provider/ai-model rate limits
     )
     _concurrency_limiter = asyncio.Semaphore(_max_concurrent_questions)
-
+    
     async def generate_concise_comment(self, full_reasoning: str) -> str:
         """Generate a concise comment from the full reasoning for Metaculus posting."""
         prompt = clean_indents(
@@ -693,26 +694,41 @@ if __name__ == "__main__":
         },
     )
 
+    async def staggered_forecast(bot, tournament_id):
+        # Get all open questions from the tournament
+        questions = await MetaculusApi.get_questions_from_tournament(tournament_id)
+        reports = []
+        for q in questions:
+            # Forecast on one question at a time
+            report = await bot.forecast_questions([q], return_exceptions=True)
+            reports.extend(report)
+            # Add stagger to avoid rate limits
+            await asyncio.sleep(random.uniform(1.5, 3.5))
+        return reports
+
+    async def staggered_test(bot, questions):
+        reports = []
+        for q in questions:
+            report = await bot.forecast_questions([q], return_exceptions=True)
+            reports.extend(report)
+            await asyncio.sleep(random.uniform(1.5, 3.5))
+        return reports
+    
     if run_mode == "tournament":
         seasonal_tournament_reports = asyncio.run(
-            template_bot.forecast_on_tournament(
-                MetaculusApi.CURRENT_AI_COMPETITION_ID, return_exceptions=True
-            )
+            staggered_forecast(template_bot, MetaculusApi.CURRENT_AI_COMPETITION_ID)
         )
         minibench_reports = asyncio.run(
-            template_bot.forecast_on_tournament(
-                MetaculusApi.CURRENT_MINIBENCH_ID, return_exceptions=True
-            )
+            staggered_forecast(template_bot, MetaculusApi.CURRENT_MINIBENCH_ID)
         )
         forecast_reports = seasonal_tournament_reports + minibench_reports
+
     elif run_mode == "metaculus_cup":
         # The Metaculus cup is a good way to test the bot's performance on regularly open questions. You can also use AXC_2025_TOURNAMENT_ID = 32564 or AI_2027_TOURNAMENT_ID = "ai-2027"
         # The Metaculus cup may not be initialized near the beginning of a season (i.e. January, May, September)
         template_bot.skip_previously_forecasted_questions = False
         forecast_reports = asyncio.run(
-            template_bot.forecast_on_tournament(
-                MetaculusApi.CURRENT_METACULUS_CUP_ID, return_exceptions=True
-            )
+            staggered_forecast(template_bot, MetaculusApi.CURRENT_METACULUS_CUP_ID)
         )
     elif run_mode == "test_questions":
         # Example questions are a good way to test the bot's performance on a single question
@@ -723,11 +739,11 @@ if __name__ == "__main__":
             "https://www.metaculus.com/c/diffusion-community/38880/how-many-us-labor-strikes-due-to-ai-in-2029/",  # Number of US Labor Strikes Due to AI in 2029 - Discrete
         ]
         template_bot.skip_previously_forecasted_questions = False
+    
         questions = [
             MetaculusApi.get_question_by_url(question_url)
             for question_url in EXAMPLE_QUESTIONS
         ]
-        forecast_reports = asyncio.run(
-            template_bot.forecast_questions(questions, return_exceptions=True)
-        )
-    template_bot.log_report_summary(forecast_reports)
+
+        forecast_reports = asyncio.run(staggered_test(template_bot, questions))
+        template_bot.log_report_summary(forecast_reports)
