@@ -687,7 +687,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "openrouter/google/gemini-2.5-pro:online",
+              "researcher": "openrouter/google/gemini-pro:online",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
