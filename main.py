@@ -466,38 +466,28 @@ class FallTemplateBot2025(ForecastBot):
         )
         full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
         logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
-        predicted_option_list: PredictedOptionList = await structure_output(
-            full_reasoning, PredictedOptionList, model=self.get_llm("parser", "llm")
-        )
-        logger.info(
-            f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
-        )
-
         parsing_instructions = clean_indents(
             f"""
             Make sure that all option names are one of the following:
             {question.options}
-            The text you are parsing may prepend these options with some variation of "Option" which you should remove if not part of the option names I just gave you.
+            The text you are parsing may prepend these options with some variation of "Option"
+            which you should remove if not part of the option names I just gave you.
             """
         )
-        full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
-        logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
+
+        # Parse once (with instructions)
         predicted_option_list: PredictedOptionList = await structure_output(
             text_to_structure=full_reasoning,
             output_type=PredictedOptionList,
             model=self.get_llm("parser", "llm"),
             additional_instructions=parsing_instructions,
         )
-        logger.info(
-            f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
-        )
 
-        # Normalize probabilities to meet Metaculus API requirements
+        # Normalize
         probs = [opt.probability for opt in predicted_option_list.options]
         normalized = self._normalize_probabilities(probs)
         for i, opt in enumerate(predicted_option_list.options):
             opt.probability = normalized[i]
-
         
         concise_comment = await self.generate_concise_comment(full_reasoning)
         logger.info(f"Concise comment for URL {question.page_url}: {concise_comment}")
