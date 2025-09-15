@@ -31,8 +31,7 @@ class FallTemplateBot2025(ForecastBot):
 
     Main modifications:
     - Re-write prompts for "forecaster" and "researcher" to incorporate forecasting principles
-    - Use gpt-5 for "forecaster" - seems like the most powerful model right now
-    - Use asknews for "researcher" - to collect more up-to-date information
+    - Modify which models are used for "forecaster" and "researcher"
     - Shorten comments posted to Metaculus
 
     Original text from template: 
@@ -688,7 +687,7 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "asknews/news-summaries",
+              "researcher": "perplexity/sonar",
         #     "parser": "openai/gpt-4o-mini",
         },
     )
