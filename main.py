@@ -456,15 +456,6 @@ class FallTemplateBot2025(ForecastBot):
             </finalization_format>
             """
         )
-        full_reasoning = await self.get_llm("default", "llm").invoke(prompt)
-        logger.info(f"Reasoning for URL {question.page_url}: {full_reasoning}")
-        predicted_option_list: PredictedOptionList = await structure_output(
-            full_reasoning, PredictedOptionList, model=self.get_llm("parser", "llm")
-        )
-        logger.info(
-            f"Forecasted URL {question.page_url} with prediction: {predicted_option_list}"
-        )
-
         parsing_instructions = clean_indents(
             f"""
             Make sure that all option names are one of the following:
@@ -688,7 +679,7 @@ if __name__ == "__main__":
              ),
         #     "summarizer": "openai/gpt-4o-mini",
               "researcher": "openrouter/openai/gpt-5:online",
-        #     "parser": "openai/gpt-4o-mini",
+              "parser": "openai/gpt-4o-mini",
         },
     )
 
