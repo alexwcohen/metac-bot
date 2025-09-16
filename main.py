@@ -679,7 +679,7 @@ if __name__ == "__main__":
              ),
         #     "summarizer": "openai/gpt-4o-mini",
               "researcher": "openrouter/openai/gpt-5:online",
-              "parser": "openai/gpt-4o-mini",
+              "parser": "openrouter/openai/gpt-4o-mini",
         },
     )
 
