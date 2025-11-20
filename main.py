@@ -33,8 +33,8 @@ class FallTemplateBot2025(ForecastBot):
     - Re-write prompts for "forecaster" and "researcher" to incorporate forecasting principles
     - Modify which models are used for "forecaster" and "researcher"
 
-    Original text from template: 
-    
+    Original text from template:
+   
     This is a copy of the template bot for Fall 2025 Metaculus AI Tournament.
     This bot is what is used by Metaculus in our benchmark, but is also provided as a template for new bot makers.
     This template is given as-is, and though we have covered most test cases
@@ -112,7 +112,7 @@ class FallTemplateBot2025(ForecastBot):
         1  # Set this to whatever works for your search-provider/ai-model rate limits
     )
     _concurrency_limiter = asyncio.Semaphore(_max_concurrent_questions)
-    
+   
     async def run_research(self, question: MetaculusQuestion) -> str:
         async with self._concurrency_limiter:
             research = ""
@@ -137,7 +137,7 @@ class FallTemplateBot2025(ForecastBot):
                 - Factors that could influence the outcome
                 - Historical distributions/base rates for similar cases
                 - What makes this case unique compared to precedent
-                
+               
                 Recency:
                 - Always scan for recent coverage first.
                 - If relevant news exists, the **first citation must be from within the last 30 days**.
@@ -147,9 +147,9 @@ class FallTemplateBot2025(ForecastBot):
                 - Search Metaculus for related or duplicate questions and report the current median forecast (include link).
                 - Check if Good Judgment Open, Manifold, or betting markets have related questions; summarize their consensus or odds if available.
                 - Always include at least one benchmark if any relevant question exists.  
-                
+               
                 Sourcing:
-                - Use 3–6 citations from primary or highly reputable outlets. 
+                - Use 3–6 citations from primary or highly reputable outlets.
                 - Provide citations in this format: [Source | Title | Date | URL].
                 - Do not invent URLs. If uncertain, state uncertainty and omit the link.
 
@@ -164,16 +164,7 @@ class FallTemplateBot2025(ForecastBot):
             )
 
             if isinstance(researcher, GeneralLlm):
-                research = await researcher.invoke(
-                    prompt,
-                    plugins=[
-                        {
-                            "id": "web",
-                            "engine": "exa", # Use Exa for reliable search results
-                            "max_results": 5
-                        }
-                    ]
-                )
+                research = await researcher.invoke(prompt)
             elif researcher == "asknews/news-summaries":
                 research = await AskNewsSearcher().get_formatted_news_async(
                     question.question_text
@@ -200,7 +191,7 @@ class FallTemplateBot2025(ForecastBot):
                     model=model_name,
                     temperature=0,
                     num_searches_to_run=3,  # Changed from 2 to 3
-                    num_sites_per_search=10, 
+                    num_sites_per_search=10,
                     use_advanced_filters=False,
                 )
                 research = await searcher.invoke(prompt)
@@ -220,7 +211,7 @@ class FallTemplateBot2025(ForecastBot):
 
             </task>
 
-            <context> Your interview question is: 
+            <context> Your interview question is:
             {question.question_text}
 
             Question background:
@@ -231,8 +222,8 @@ class FallTemplateBot2025(ForecastBot):
 
             Additional clarifications: {question.fine_print}
 
-            You have been provided with context from a research assistant. Their research says: 
-            {research} 
+            You have been provided with context from a research assistant. Their research says:
+            {research}
 
             Today is {datetime.now().strftime("%Y-%m-%d")}
 
@@ -246,39 +237,39 @@ class FallTemplateBot2025(ForecastBot):
             - Strive to distinguish as many degrees of doubt as the problem permits
             - Balance under- and overconfidence, erring on the side of underconfidence
             - Look for the errors behind your mistakes but beware of rearview-mirror hindsight bias
-            
+           
             </superforecasting_principles>
 
             <thinking_process> Before providing your forecasts:
 
             1. Restate the Question
             - Briefly rephrase the question and resolution criteria in precise, measurable terms.
-            
+           
             2. Base Rates (Outside View)
             - Identify 2-3 relevant reference classes (broader to narrower)
             - Calculate historical base rates for each class
             - Weight the reference classes by relevance and data quality            
-            - Start here before adding case-specific detail. 
-            
+            - Start here before adding case-specific detail.
+           
             3. External Benchmarks
             - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
             - Note the reliability/calibration of each source.
-            
+           
             4. Case-Specific Analysis (Inside View)
             - List factors pushing probabilities up vs. down.
             - Break into sub-problems if useful.
             - Weigh evidence quality (data > speculation).
-            
+           
             5. Pressure-Testing
             - Begin with base rate, then update with inside view and external forecasts.
             - Apply “consider the opposite.”
             - Sensitivity check: what info would shift your forecast by ≥20 points?
-            
+           
             6. Bias & Overconfidence Check
             - Are you overfitting to recent/striking events?
             - Did you seek disconfirming evidence?
             - Are your confidence intervals wide enough? (Err toward broader CIs unless evidence is strong.)
-            
+           
             7. Calibration
             - Avoid extreme probabilities without extraordinary evidence (Cromwell’s Rule).
             - State your uncertainty range explicitly.
@@ -322,7 +313,7 @@ class FallTemplateBot2025(ForecastBot):
 
             </task>
 
-            <context> Your interview question is: 
+            <context> Your interview question is:
             {question.question_text}
 
             Question background:
@@ -333,8 +324,8 @@ class FallTemplateBot2025(ForecastBot):
 
             Additional clarifications: {question.fine_print}
 
-            You have been provided with context from a research assistant. Their research says: 
-            {research} 
+            You have been provided with context from a research assistant. Their research says:
+            {research}
 
             Today is {datetime.now().strftime("%Y-%m-%d")}
 
@@ -348,39 +339,39 @@ class FallTemplateBot2025(ForecastBot):
             - Strive to distinguish as many degrees of doubt as the problem permits
             - Balance under- and overconfidence, erring on the side of underconfidence
             - Look for the errors behind your mistakes but beware of rearview-mirror hindsight bias
-            
+           
             </superforecasting_principles>
 
             <thinking_process> Before providing your forecasts:
 
             1. Restate the Question
             - Briefly rephrase the question and resolution criteria in precise, measurable terms.
-            
+           
             2. Base Rates (Outside View)
             - Identify 2-3 relevant reference classes (broader to narrower)
             - Calculate historical base rates for each class
             - Weight the reference classes by relevance and data quality            
-            - Start here before adding case-specific detail. 
-            
+            - Start here before adding case-specific detail.
+           
             3. External Benchmarks
             - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
             - Note the reliability/calibration of each source.
-            
+           
             4. Case-Specific Analysis (Inside View)
             - List factors pushing values up vs. down.
             - Break into sub-problems if useful.
             - Weigh evidence quality (data > speculation).
-            
+           
             5. Pressure-Testing
             - Begin with base rate, then update with inside view and external forecasts.
             - Apply “consider the opposite.”
             - Sensitivity check: what info would shift your forecast by ≥20 points?
-            
+           
             6. Bias & Overconfidence Check
             - Are you overfitting to recent/striking events?
             - Did you seek disconfirming evidence?
             - Are your confidence intervals wide enough? (Err toward broader CIs unless evidence is strong.)
-            
+           
             7. Calibration
             - Avoid extreme values without extraordinary evidence (Cromwell’s Rule).
             - State your uncertainty range explicitly.
@@ -440,7 +431,7 @@ class FallTemplateBot2025(ForecastBot):
 
             </task>
 
-            <context> Your interview question is: 
+            <context> Your interview question is:
             {question.question_text}
 
             Question background:
@@ -454,9 +445,9 @@ class FallTemplateBot2025(ForecastBot):
             Units for answer: {question.unit_of_measure if question.unit_of_measure else "Not stated (please infer this)"}
             Upper bound hint: {upper_bound_message}
             Lower bound hint: {lower_bound_message}
-            
-            You have been provided with context from a research assistant. Their research says: 
-            {research} 
+           
+            You have been provided with context from a research assistant. Their research says:
+            {research}
 
             Today is {datetime.now().strftime("%Y-%m-%d")}
 
@@ -470,39 +461,39 @@ class FallTemplateBot2025(ForecastBot):
             - Strive to distinguish as many degrees of doubt as the problem permits
             - Balance under- and overconfidence, erring on the side of underconfidence
             - Look for the errors behind your mistakes but beware of rearview-mirror hindsight bias
-            
+           
             </superforecasting_principles>
 
             <thinking_process> Before providing your forecasts:
 
             1. Restate the Question
             - Briefly rephrase the question and resolution criteria in precise, measurable terms.
-            
+           
             2. Base Rates (Outside View)
             - Identify 2-3 relevant reference classes (broader to narrower)
             - Calculate historical base rates for each class
             - Weight the reference classes by relevance and data quality            
-            - Start here before adding case-specific detail. 
-            
+            - Start here before adding case-specific detail.
+           
             3. External Benchmarks
             - Check consensus forecasts (Metaculus, GJO, Manifold, etc.) or betting sites if available.
             - Note the reliability/calibration of each source.
-            
+           
             4. Case-Specific Analysis (Inside View)
             - List factors pushing values up vs. down.
             - Break into sub-problems if useful.
             - Weigh evidence quality (data > speculation).
-            
+           
             5. Pressure-Testing
             - Begin with base rate, then update with inside view and external forecasts.
             - Apply “consider the opposite.”
             - Sensitivity check: what info would shift your forecast by ≥20 points?
-            
+           
             6. Bias & Overconfidence Check
             - Are you overfitting to recent/striking events?
             - Did you seek disconfirming evidence?
             - Are your confidence intervals wide enough? (Err toward broader CIs unless evidence is strong.)
-            
+           
             7. Calibration
             - Avoid extreme values without extraordinary evidence (Cromwell’s Rule).
             - State your uncertainty range explicitly.
@@ -612,22 +603,17 @@ if __name__ == "__main__":
         publish_reports_to_metaculus=True, ## TOGGLE
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
-        llms={ 
+        llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
              "default": GeneralLlm(
-                 model="openrouter/openai/gpt-4o", # Used for forecasting
-                 temperature=0.2,
-                 timeout=40,
-                 allowed_tries=2,
-             ),
-             # Use GeneralLlm so we can invoke it later
-             "researcher": GeneralLlm(
-                 model="openrouter/openai/gpt-5",
-                 temperature=0.2, # Research should be deterministic
-                 timeout=60, # Give it more time for search
-                 allowed_tries=3,
-             ),
-             "parser": "openrouter/openai/gpt-4o-mini",
-            },
+                 model="openrouter/openai/gpt-4o", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
+                 temperature=0.2,
+                 timeout=40,
+                 allowed_tries=2,
+             ),
+        #     "summarizer": "openai/gpt-4o-mini",
+              "researcher": "openrouter/openai/gpt-5:online",
+              "parser": "openrouter/openai/gpt-4o-mini",
+        },
     )
 
     if run_mode == "tournament":
