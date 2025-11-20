@@ -613,7 +613,7 @@ if __name__ == "__main__":
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
         llms={ 
-            "default": GeneralLlm(
+             "default": GeneralLlm(
                  model="openrouter/openai/gpt-4o", # Used for forecasting
                  temperature=0.2,
                  timeout=40,
