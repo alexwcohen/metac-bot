@@ -612,7 +612,7 @@ if __name__ == "__main__":
              ),
         #     "summarizer": "openai/gpt-4o-mini",
               "researcher": GeneralLlm(
-                  model="openrouter/openai/gpt-5:online",
+                  model="openrouter/openai/gpt-5.1:online",
                   temperature=0.2,
                   timeout=400,  # 5 minutes instead of default 120 seconds
                   allowed_tries=2,
