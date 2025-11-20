@@ -164,7 +164,17 @@ class FallTemplateBot2025(ForecastBot):
             )
 
             if isinstance(researcher, GeneralLlm):
-                research = await researcher.invoke(prompt)
+                # This is the key edit: passing the plugins argument to invoke()
+                research = await researcher.invoke(
+                    prompt,
+                    plugins=[
+                        {
+                            "id": "web",
+                            "engine": "exa", # Use Exa for reliable search results
+                            "max_results": 5
+                        }
+                    ]
+                )
             elif researcher == "asknews/news-summaries":
                 research = await AskNewsSearcher().get_formatted_news_async(
                     question.question_text
@@ -611,7 +621,12 @@ if __name__ == "__main__":
                  allowed_tries=2,
              ),
         #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "openrouter/openai/gpt-5:online",
+              "researcher": GeneralLlm(
+                 model="openrouter/openai/gpt-5", 
+                 temperature=0.2,
+                 timeout=40,
+                 allowed_tries=2,
+             ),
               "parser": "openrouter/openai/gpt-4o-mini",
         },
     )
