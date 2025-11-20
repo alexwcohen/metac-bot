@@ -164,7 +164,16 @@ class FallTemplateBot2025(ForecastBot):
             )
 
             if isinstance(researcher, GeneralLlm):
-                research = await researcher.invoke(prompt)
+                research = await researcher.invoke(
+                    prompt,
+                    plugins=[
+                        {
+                            "id": "web",
+                            "engine": "exa", # Use Exa for reliable search results
+                            "max_results": 5
+                        }
+                    ]
+                )
             elif researcher == "asknews/news-summaries":
                 research = await AskNewsSearcher().get_formatted_news_async(
                     question.question_text
@@ -603,17 +612,22 @@ if __name__ == "__main__":
         publish_reports_to_metaculus=True, ## TOGGLE
         folder_to_save_reports_to=None,
         skip_previously_forecasted_questions=True,
-        llms={  # choose your model names or GeneralLlm llms here, otherwise defaults will be chosen for you
-             "default": GeneralLlm(
-                 model="openrouter/openai/gpt-4o", # "anthropic/claude-3-5-sonnet-20241022", etc (see docs for litellm)
-                 temperature=0.2,
-                 timeout=40,
-                 allowed_tries=2,
-             ),
-        #     "summarizer": "openai/gpt-4o-mini",
-              "researcher": "openrouter/openai/gpt-5:online",
-              "parser": "openrouter/openai/gpt-4o-mini",
-        },
+        llms={ 
+             "default": GeneralLlm(
+                 model="openrouter/openai/gpt-4o", # Used for forecasting
+                 temperature=0.2,
+                 timeout=40,
+                 allowed_tries=2,
+             ),
+             # Use GeneralLlm so we can invoke it later
+             "researcher": GeneralLlm(
+                 model="openrouter/openai/gpt-5",
+                 temperature=0.2, # Research should be deterministic
+                 timeout=60, # Give it more time for search
+                 allowed_tries=3,
+             ),
+             "parser": "openrouter/openai/gpt-4o-mini",
+            },
     )
 
     if run_mode == "tournament":
